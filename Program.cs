@@ -8,7 +8,6 @@ namespace LoggerApp
         {
             Starter startApp = new Starter();
             startApp.Run();
-
         }
     }
 }

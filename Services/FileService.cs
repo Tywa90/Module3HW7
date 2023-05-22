@@ -19,9 +19,7 @@ namespace LoggerApp.Services
             SerializationSample();
             DirectoryPath();
             DirectoryCheck();
-            CreateFiles();
-            DeleteFiles(LogDirPath);
-            DeleteFiles(BackUpDirPath);
+            CreateLog();
         }
 
         private static void SerializationSample()
@@ -35,9 +33,6 @@ namespace LoggerApp.Services
         {
             LogDirPath = Config.Logger.DirectoryPath;
             BackUpDirPath = Config.Logger.BackUpDirectoryPath;
-
-            LogDirPath = LogDirPath.Trim('/');
-            BackUpDirPath = BackUpDirPath.Trim('/');
         }
 
         private static void DirectoryCheck()
@@ -55,41 +50,14 @@ namespace LoggerApp.Services
             }
         }
 
-        private static void CreateFiles()
+        private static void CreateLog()
         {
-            FileName filename = new FileName();
-            string name = filename.SetFromConfig(Config);
+            string name = DateTime.Now.ToString(Config.Logger.FileName);
 
             var textLog = Logger.Sb.ToString();
 
             File.WriteAllText($"{LogDirPath}\\{name}.txt", textLog);
             File.WriteAllText($"{BackUpDirPath}\\{name}.txt", textLog);
-        }
-
-        private static void DeleteFiles(string dirName)
-        {
-            string[] filesArray = Directory.GetFiles(dirName);
-
-            if (filesArray.Length > 3)
-            {
-                DateTime[] dateArr = new DateTime[filesArray.Length];
-                for (int i = 0; i < filesArray.Length; i++)
-                {
-                    dateArr[i] = File.GetCreationTime(filesArray[i]);
-                }
-
-                int counterToDelFiles = filesArray.Length - 3;
-                for (int i = 0; i < counterToDelFiles; i++)
-                {
-                    for (int j = 0; j < filesArray.Length; j++)
-                    {
-                        if (dateArr[i].CompareTo(dateArr[j]) < 0)
-                        {
-                            File.Delete(filesArray[i]);
-                        }
-                    }
-                }
-            }
         }
     }
 }

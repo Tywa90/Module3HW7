@@ -12,6 +12,10 @@ namespace LoggerApp
     {
 
         private static StringBuilder _sb = new StringBuilder();
+        public event Action<string> BackUp;
+        public List<string> Logs { get; set; }
+        public List<string> BackUps { get; set; }
+
         public static StringBuilder Sb
         {
             get { return _sb; }
@@ -25,9 +29,9 @@ namespace LoggerApp
             _sb.Append(logConsole + "\n");
         }
 
-        public static void RunFileServices()
-        {
-            FileService.Run();
-        }
+        //public static void RunFileServices()
+        //{
+        //    FileService.Run();
+        //}
     }
 }
